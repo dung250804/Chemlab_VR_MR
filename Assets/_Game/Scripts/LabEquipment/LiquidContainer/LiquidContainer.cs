@@ -15,6 +15,19 @@ public class LiquidContainer : ContainerEquipmentBase
     private Stream waterStream; 
     private bool isPouring = false;
     private const float MAX_LENGTH = 2f;
+    private static int _layerMask;
+
+    public static int LayerMaskStatic
+    {
+        get
+        {
+            if (_layerMask == 0)
+            {
+                _layerMask = ~LayerMask.GetMask("Ignore Raycast");
+            }
+            return _layerMask;
+        }
+    }
 
     void Update()
     {
@@ -87,13 +100,13 @@ public class LiquidContainer : ContainerEquipmentBase
         Vector3 rayOrigin = transform.position + Vector3.down * 0.02f;
         Ray ray = new Ray(rayOrigin, Vector3.down);
         
-        if (Physics.Raycast(ray, out hit, MAX_LENGTH))
+        if (Physics.Raycast(ray, out hit, MAX_LENGTH, LayerMaskStatic))
         {
             while (transform.IsChildOf(hit.collider.transform))
             {
                 rayOrigin += Vector3.down * 0.02f;
                 ray = new Ray(rayOrigin, Vector3.down);
-                if (!Physics.Raycast(ray, out hit, MAX_LENGTH))
+                if (!Physics.Raycast(ray, out hit, MAX_LENGTH, LayerMaskStatic))
                 break;
             }
             var targetCup = hit.collider.GetComponent<LiquidContainer>();

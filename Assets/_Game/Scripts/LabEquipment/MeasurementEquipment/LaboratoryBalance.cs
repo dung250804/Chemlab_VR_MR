@@ -42,6 +42,7 @@ public class LaboratoryBalance : MeasurementEquipmentBase
         powerButton.WhenSelect.AddListener(OnPowerSelected);
         modeButton.WhenSelect.AddListener(OnModeSelected);
         tareButton.WhenSelect.AddListener(OnTareSelected);
+        UpdateLabDisplayText();
     }
 
     private void OnDestroy()
@@ -216,6 +217,8 @@ public class LaboratoryBalance : MeasurementEquipmentBase
     private void OnTriggerEnter(Collider other)
     {   
         if (!other.TryGetComponent(out LabEquipmentBase labEquipment))
+            return;
+        if (objectsOnPlate.Contains(labEquipment))
             return;
         objectsOnPlate.Add(labEquipment);
     }
