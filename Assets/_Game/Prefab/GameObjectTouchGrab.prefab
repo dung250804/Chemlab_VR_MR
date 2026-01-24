@@ -44,7 +44,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5501317027212803156}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 0.5
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -58,8 +58,8 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
+  m_UseGravity: 0
+  m_IsKinematic: 1
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 1
@@ -217,6 +217,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 20528890, guid: 34edf6f811901d745ba9f16663a5342e, type: 3}
       propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2847663712815824525, guid: 34edf6f811901d745ba9f16663a5342e, type: 3}
+      propertyPath: fillAmount
+      value: 0.66
+      objectReference: {fileID: 0}
+    - target: {fileID: 2847663712815824525, guid: 34edf6f811901d745ba9f16663a5342e, type: 3}
+      propertyPath: maxFillAmount
+      value: 0.66
+      objectReference: {fileID: 0}
+    - target: {fileID: 2847663712815824525, guid: 34edf6f811901d745ba9f16663a5342e, type: 3}
+      propertyPath: minFillAmount
+      value: 0.33
+      objectReference: {fileID: 0}
+    - target: {fileID: 2847663712815824525, guid: 34edf6f811901d745ba9f16663a5342e, type: 3}
+      propertyPath: CompensateShapeAmount
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
