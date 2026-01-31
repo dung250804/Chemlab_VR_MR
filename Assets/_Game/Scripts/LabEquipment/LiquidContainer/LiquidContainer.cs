@@ -1,4 +1,3 @@
-using Newtonsoft.Json.Serialization;
 using UnityEngine;
 
 public class LiquidContainer : ContainerEquipmentBase 
@@ -168,6 +167,14 @@ public class LiquidContainer : ContainerEquipmentBase
     {
         currentVolume += amount;
         currentVolume = Mathf.Clamp(currentVolume, 0, maxVolume);
+    }
+
+    // Hàm lấy nước 
+    public float Drain(float amount)
+    {
+        float drained = Mathf.Min(amount, currentVolume);
+        currentVolume -= drained;
+        return drained;
     }
 
     private Stream CreateStream()

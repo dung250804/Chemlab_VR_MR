@@ -6,7 +6,7 @@ public class WoobleLiquid : MonoBehaviour
 {
     public enum UpdateMode { Normal, UnscaledTime }
     public UpdateMode updateMode;
-    [SerializeField] LiquidContainer liquidContainer;
+    [SerializeField] ContainerEquipmentBase liquidContainer;
     [SerializeField] float MaxWobble = 0.03f;
     [SerializeField] float WobbleSpeedMove = 1f;
     [SerializeField] float Recovery = 1f;
