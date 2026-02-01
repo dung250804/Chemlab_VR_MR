@@ -10,9 +10,6 @@ public class Pipette : ContainerEquipmentBase
     public float minPlungerY;
     public float maxPlungerY;
 
-    [Header("Smoothing")]
-    public float smoothTime = 0.15f;
-
     // =========================
     // INTERNAL
     // =========================
@@ -20,8 +17,6 @@ public class Pipette : ContainerEquipmentBase
     private Stream waterStream;
 
     private float targetVolume;
-    private float volumeVelocity;
-    private float lastVolume;
     private float lastNormalized;
 
     const float VOLUME_EPSILON = 0.001f;
@@ -42,14 +37,12 @@ public class Pipette : ContainerEquipmentBase
     void Start()
     {
         targetVolume = currentVolume;
-        lastVolume = currentVolume;
         lastNormalized = GetNormalizedPlunger();
     }
 
     void Update()
     {
         HandlePlungerIntent();
-        SmoothVolume();
         HandleLiquidTransfer();
     }
 
@@ -77,49 +70,24 @@ public class Pipette : ContainerEquipmentBase
     }
 
     // =========================
-    // SMOOTH VOLUME
-    // =========================
-    void SmoothVolume()
-    {
-        currentVolume = Mathf.SmoothDamp(
-            currentVolume,
-            targetVolume,
-            ref volumeVelocity,
-            smoothTime
-        );
-
-        if (Mathf.Abs(currentVolume - targetVolume) < VOLUME_EPSILON)
-        {
-            currentVolume = targetVolume;
-            volumeVelocity = 0f;
-        }
-    }
-
-    // =========================
     // HÚT / ĐỔ
     // =========================
     void HandleLiquidTransfer()
     {
-        float deltaVolume = currentVolume - lastVolume;
+        float delta = targetVolume - currentVolume;
 
-        if (Mathf.Abs(deltaVolume) < VOLUME_EPSILON)
+        if (Mathf.Abs(delta) < VOLUME_EPSILON)
         {
             StopPour();
-            lastVolume = currentVolume;
             return;
         }
 
-        if (deltaVolume > 0)
-        {
-            TrySuck(deltaVolume);
-        }
+        if (delta > 0)
+            TrySuck(delta);
         else
-        {
-            TryPour(-deltaVolume);
-        }
-
-        lastVolume = currentVolume;
+            TryPour(-delta);
     }
+
 
     // =========================
     // HÚT
@@ -128,39 +96,46 @@ public class Pipette : ContainerEquipmentBase
     {
         if (touchingContainer == null)
         {
-            targetVolume = currentVolume;
+            targetVolume = currentVolume; // không cho tích nợ
             return;
         }
 
         float sucked = touchingContainer.Drain(amount);
-
-        currentVolume -= (amount - sucked);
-        targetVolume = currentVolume;
+        currentVolume += sucked;
     }
+
 
     // =========================
     // ĐỔ
     // =========================
     void TryPour(float amount)
     {
-        LiquidContainer target = DetectLiquidBelow(MAX_LENGTH);
-
-        if (target == null)
+        if (currentVolume <= 0f)
         {
-            StopPour();
-            targetVolume = currentVolume;
+            currentVolume = 0f;
             return;
         }
 
-        StartPour();
-        target.Fill(amount);
+        float pourAmount = Mathf.Min(amount, currentVolume);
+        currentVolume -= pourAmount;
+
+        LiquidContainer target =
+            touchingContainer ? touchingContainer : DetectLiquidBelow(MAX_LENGTH);
+
+        if (pourAmount > 0f)
+        {
+            StartPour(touchingContainer == null);
+            target?.Fill(pourAmount);
+        }
     }
+
 
     // =========================
     // STREAM
     // =========================
-    void StartPour()
+    void StartPour(bool needCreate = true)
     {
+        if (!needCreate) return;
         if (waterStream == null)
             waterStream = CreateStream();
 
