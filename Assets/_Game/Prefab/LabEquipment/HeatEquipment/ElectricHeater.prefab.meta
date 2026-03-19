@@ -1,14 +1,7 @@
 fileFormatVersion: 2
-guid: 19efa05049bcb3841aeb04935e8996f6
-labels:
-- Prop
-- Chemistry
-- Laboratory
-- Eletric
-- Device
-timeCreated: 1538657350
-licenseType: Store
-NativeFormatImporter:
+guid: 37fd17d14c715c04ea11d7f3100fafd6
+PrefabImporter:
+  externalObjects: {}
   userData: 
   assetBundleName: 
   assetBundleVariant: 

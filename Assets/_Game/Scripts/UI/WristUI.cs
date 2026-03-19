@@ -18,6 +18,7 @@ public class WristUI : MonoBehaviour
 
     [Header("UI Settings")]
     public GameObject uiCanvas;
+    public GameObject molStructureDisplayPrefab;
     public Vector3 localOffset = new Vector3(0f, 0.03f, 0.05f);
 
     [Header("Palm Down Condition (Hand Tracking Only)")]
@@ -35,10 +36,12 @@ public class WristUI : MonoBehaviour
     private bool previousHandTracking = false;
     private Transform lastWrist = null;
     private bool showUI = false;
+    private bool molDisplayActive = false;
 
     private void Start()
     {
         uiCanvas.SetActive(false);
+        molStructureDisplayPrefab.SetActive(false);
         InitDebugUI();
     }
 
@@ -58,18 +61,24 @@ public class WristUI : MonoBehaviour
             if (CheckHandGesture())
                 showUI = true;
             else
+            {
                 showUI = false;
+                OnMolHide();
+            }
         }
         else
         {
             if (OVRInput.Get(OVRInput.Button.PrimaryHandTrigger))
                 showUI = true;
             else
+            {
                 showUI = false;
+                OnMolHide();
+            }
         }
 
-        uiCanvas.SetActive(showUI);
-        if (!showUI) return;
+        uiCanvas.SetActive(showUI && !molDisplayActive);
+        if (!showUI && !molDisplayActive) return;
 
         // Update 1 lần khi thay đổi trạng thái
         if (previousHandTracking != isHandTracking || lastWrist != activeWrist)
@@ -77,9 +86,9 @@ public class WristUI : MonoBehaviour
             previousHandTracking = isHandTracking;
             lastWrist = activeWrist;
 
-            uiCanvas.transform.SetParent(activeWrist, false);
-            uiCanvas.transform.localPosition = localOffset;
-            uiCanvas.transform.localRotation = Quaternion.identity;
+            transform.SetParent(activeWrist, false);
+            transform.localPosition = localOffset;
+            transform.localRotation = Quaternion.identity;
         }
     }
 
@@ -112,7 +121,7 @@ public class WristUI : MonoBehaviour
         if (debug)
             Debug.Log($"[Palm] normal.y={palmNormal.y:F3}  → palmDown={palmDown}");
 
-        if (!palmDown && !showUI) 
+        if (!palmDown && !showUI && !molDisplayActive) 
         { 
             UpdateDebugText("Palm not down"); 
             return false; 
@@ -151,7 +160,7 @@ public class WristUI : MonoBehaviour
             );
         }
 
-        if (!showUI)
+        if (!showUI && !molDisplayActive)
             return fist && palmDown;  
         return fist; 
     }
@@ -196,5 +205,25 @@ public class WristUI : MonoBehaviour
     {
         if (debugTextUI != null)
             debugTextUI.text = msg;
+    }
+
+    public void OnMolDisplay(MolStructure mol)
+    {
+        GameObject molPref = Instantiate(mol.prefab, molStructureDisplayPrefab.transform);
+        molPref.transform.localPosition = Vector3.zero;
+        molStructureDisplayPrefab.transform.localScale = Vector3.one;
+        molStructureDisplayPrefab.SetActive(true);
+        uiCanvas.SetActive(false);
+        molDisplayActive = true;
+    }
+
+    private void OnMolHide()
+    {
+        foreach (Transform child in molStructureDisplayPrefab.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        molStructureDisplayPrefab.SetActive(false);
+        molDisplayActive = false;
     }
 }

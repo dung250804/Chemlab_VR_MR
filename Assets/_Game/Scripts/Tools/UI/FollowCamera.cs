@@ -3,6 +3,7 @@ public class FollowCamera : MonoBehaviour
 {
     public Camera targetCamera;
     public float smoothTime = 8f;
+    public bool reverseDirection = false;
 
     [Header("Lock Axis (giữ nguyên góc quay theo từng trục)")]
     public bool lockX = false;
@@ -16,6 +17,8 @@ public class FollowCamera : MonoBehaviour
 
         // Vector từ UI → Camera
         Vector3 direction = transform.position - cam.transform.position;
+        if (reverseDirection)
+            direction = -direction;
 
         if (direction.sqrMagnitude < 0.0001f)
             return;
