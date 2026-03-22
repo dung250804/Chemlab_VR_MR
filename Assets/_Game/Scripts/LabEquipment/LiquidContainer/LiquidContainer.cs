@@ -198,10 +198,17 @@ public class LiquidContainer : ContainerEquipmentBase
                 if (!Physics.Raycast(ray, out hit, MAX_LENGTH, LayerMaskStatic))
                     break;
             }
-            var targetCup = hit.collider.GetComponentInParent<LiquidContainer>();
-            if (targetCup != null)
+
+            var target = hit.collider.GetComponentInParent<ContainerEquipmentBase>();
+
+            if (target != null && target != this)
             {
-                targetCup.Fill(amount);
+                var extracted = ExtractMixture(amount);
+
+                if (extracted != null)
+                {
+                    target.ReceiveMixture(extracted, amount);
+                }
             }
         }
     }
