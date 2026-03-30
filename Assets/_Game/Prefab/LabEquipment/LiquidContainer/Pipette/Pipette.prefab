@@ -167,15 +167,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isGrabbable: 1
   weightGram: 50
-  maxVolume: 100
+  maxVolume: 50
   currentVolume: 0
   spoutCenter: {fileID: 9188051177337101487}
   spoutRadius: 0
+  heatConductivity: 1000
+  debugMolecules: []
+  debugMoles: []
+  debugTemperature: 0
   waterStreamPrefab: {fileID: 5238570228697279498, guid: 687fe5b6c1388c34882009636030b3c7, type: 3}
   plunger: {fileID: 8289654451181826046}
   minPlungerY: 0.04
   maxPlungerY: 0.14
-  smoothTime: 0.15
 --- !u!1 &7521946706953870329
 GameObject:
   m_ObjectHideFlags: 0

@@ -5,6 +5,7 @@ using com.ethnicthv.chemlab.engine.mixture;
 using com.ethnicthv.chemlab.engine.molecule;
 using System.Collections.Generic;
 using Environment = com.ethnicthv.chemlab.client.core.game.Environment;
+using com.ethnicthv.chemlab.engine;
 
 public abstract class ContainerEquipmentBase : LabEquipmentBase,
     IMixtureContainer, IChemicalTicker,
@@ -32,6 +33,17 @@ public abstract class ContainerEquipmentBase : LabEquipmentBase,
 
     private Mixture _tickGasMixture;
     private float _tickGasVolume;
+
+    private void OnEnable()
+    {
+        ChemicalTickerHandler.AddTicker(this);
+    }
+
+    private void OnDisable()
+    {
+        ChemicalTickerHandler.RemoveTicker(this);
+    }
+
     
     // =========================
     // ===== MIXTURE CORE ======
@@ -79,7 +91,6 @@ public abstract class ContainerEquipmentBase : LabEquipmentBase,
     // ===== ADD / MIX =========
     // =========================
 
-    /// 🔥 HÀM QUAN TRỌNG NHẤT
     public void ReceiveMixture(Mixture incoming, float volume)
     {
         if (incoming == null || volume <= 0) return;
@@ -108,36 +119,28 @@ public abstract class ContainerEquipmentBase : LabEquipmentBase,
 
         _contents = mixed;
 
-        if (newVolume > 0)
-            _contents.Scale(1f / newVolume);
+        // if (newVolume > 0)
+        //     _contents.Scale(1000f / newVolume);
 
         currentVolume = newVolume;
-    }
 
-    public Mixture ExtractMixture(float volume)
-    {
-        if (_contents == null || currentVolume <= 0) return null;
-
-        float ratio = volume / currentVolume;
-
-        var extracted = Mixture.CreateMixture();
-
-        foreach (var molecule in _contents.GetMolecules())
-        {
-            float moles = _contents.GetMoles(molecule);
-            extracted.AddMoles(molecule, moles, out _);
-        }
-
-        extracted.Scale(1f / ratio);
-
-        currentVolume -= volume;
-
-        return extracted;
+        NormalizeState();
     }
 
     public void AddMixture(Mixture mixture, float volume)
     {
-        ReceiveMixture(mixture, volume);
+        if (mixture == null || volume <= 0 || currentVolume >= maxVolume) return;
+        float realVolume = Mathf.Min(volume, maxVolume - currentVolume);
+        var (newMixture, newVolume) = Mixture.Mix(new Dictionary<Mixture, float>
+        {
+            { GetMixture(), GetVolume() },
+            { mixture, realVolume }
+        });
+        
+        SetMixtureAndVolume(newMixture, newVolume);
+        // float volumeInLiters = newVolume / 1000f;
+        // _contents.Scale(1f / volumeInLiters);
+        NormalizeState();
     }
 
     // =========================
@@ -179,6 +182,7 @@ public abstract class ContainerEquipmentBase : LabEquipmentBase,
         {
             _contents.Heat(heat / currentVolume);
             _contents.DisturbEquilibrium();
+            _contents.UpdateColor();
         }
 
         _contents.Tick(out var shouldUpdate);
@@ -193,7 +197,7 @@ public abstract class ContainerEquipmentBase : LabEquipmentBase,
             _tickGasMixture = phases.GasMixture;
             _tickGasVolume = phases.GasVolume;
         }
-
+        NormalizeState();
         UpdateDebug();
     }
 
@@ -304,6 +308,49 @@ public abstract class ContainerEquipmentBase : LabEquipmentBase,
         Debug.LogError("Cannot clear solid separately from mixture");
     }
 
+    protected void NormalizeState()
+    {
+        if (_contents == null || currentVolume <= 0)
+        {
+            _contents = null;
+            currentVolume = 0;
+            return;
+        }
+
+        if (_contents.GetMolecules().Count == 0)
+        {
+            _contents = null;
+            currentVolume = 0;
+        }
+    }
+
+    public float GetPH()
+    {
+        var mixture = GetMixture();
+        if (mixture == null) return 7f;
+
+        float h = mixture.GetMoles(Molecules.Proton);
+        float oh = mixture.GetMoles(Molecules.Hydroxide);
+
+        float netH = h - oh;
+
+        const float epsilon = 1e-7f;
+
+        if (netH > 0)
+        {
+            return -Mathf.Log10(Mathf.Max(netH, epsilon));
+        }
+        else if (netH < 0)
+        {
+            float pOH = -Mathf.Log10(Mathf.Max(-netH, epsilon));
+            return 14f - pOH;
+        }
+        else
+        {
+            return 7f;
+        }
+    }
+
     protected void UpdateDebug()
     {
         debugMolecules.Clear();
@@ -315,12 +362,14 @@ public abstract class ContainerEquipmentBase : LabEquipmentBase,
 
         foreach (var molecule in _contents.GetMolecules())
         {
-            float moles = _contents.GetMoles(molecule);
+            // Lấy nồng độ (mol/L) nhân với thể tích (Lít) để ra số mol thực tế
+            float concentration = _contents.GetMoles(molecule);
+            float actualMoles = concentration * (currentVolume / 1000f); 
 
-            if (moles <= 0) continue;
+            if (actualMoles <= 0) continue;
 
             debugMolecules.Add(molecule.GetFullID());
-            debugMoles.Add(moles);
+            debugMoles.Add(actualMoles); 
         }
     }
 }

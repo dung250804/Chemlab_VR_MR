@@ -14,6 +14,7 @@ public class WoobleLiquid : MonoBehaviour
     [Range(0, 1)] public float CompensateShapeAmount;
     [SerializeField] Mesh mesh;
     [SerializeField] Renderer rend;
+    Material mat;
     Vector3 pos;
     Vector3 lastPos;
     Vector3 velocity;
@@ -30,11 +31,30 @@ public class WoobleLiquid : MonoBehaviour
     [SerializeField] float maxFillAmount = 1f;
     [SerializeField]float fillAmount = 0f;
     Vector3 comp;
+
+    Color currentTint;
+    Color currentTop;
+    Color currentRim;
+
+    private float colorLerpSpeed = 5f;
  
     // Use this for initialization
     void Start()
     {
         GetMeshAndRend();
+        mat = rend.material;
+
+        if (liquidContainer != null && liquidContainer.currentVolume > 0 && liquidContainer.GetMixture() != null)
+        {
+            currentTint = liquidContainer.GetMixture().GetColor();
+
+            CalculateLiquidColors(currentTint, out currentTop, out currentRim);
+            
+            mat.SetColor("_BottomColor", currentTint);
+            mat.SetColor("_TopColor", currentTop);
+            mat.SetColor("_Rim_Color", currentRim);
+        }
+        Debug.Log(currentTint);
     }
  
     private void OnValidate()
@@ -107,8 +127,8 @@ public class WoobleLiquid : MonoBehaviour
         }
  
         // send it to the shader
-        rend.material.SetFloat("_WobbleX", wobbleAmountX);
-        rend.material.SetFloat("_WobbleZ", wobbleAmountZ);
+        mat.SetFloat("_WobbleX", wobbleAmountX);
+        mat.SetFloat("_WobbleZ", wobbleAmountZ);
  
         // set fill amount
         UpdatePos(deltaTime);
@@ -116,6 +136,23 @@ public class WoobleLiquid : MonoBehaviour
         // keep last position
         lastPos = transform.position;
         lastRot = transform.rotation;
+
+        if (liquidContainer != null && liquidContainer.currentVolume > 0 && liquidContainer.GetMixture() != null)
+        {
+            Color targetColor = liquidContainer.GetMixture().GetColor();
+
+            // Tint = màu thật
+            currentTint = Color.Lerp(currentTint, targetColor, Time.deltaTime * colorLerpSpeed);
+
+            CalculateLiquidColors(targetColor, out Color topTarget, out Color rimTarget);
+            currentTop = Color.Lerp(currentTop, topTarget, Time.deltaTime * colorLerpSpeed);
+
+            currentRim = Color.Lerp(currentRim, rimTarget, Time.deltaTime * colorLerpSpeed);
+
+            mat.SetColor("_BottomColor", currentTint);
+            mat.SetColor("_TopColor", currentTop);
+            mat.SetColor("_Rim_Color", currentRim);
+        }
     }
  
     void UpdatePos(float deltaTime)
@@ -140,7 +177,7 @@ public class WoobleLiquid : MonoBehaviour
         {
             pos = worldPos - transform.position - new Vector3(0, fillAmount, 0);
         }
-        rend.material.SetVector("_FillAmount", pos);
+        mat.SetVector("_FillAmount", pos);
     }
  
     //https://forum.unity.com/threads/manually-calculate-angular-velocity-of-gameobject.289462/#post-4302796
@@ -191,5 +228,40 @@ public class WoobleLiquid : MonoBehaviour
             }
         }
         return lowestVert.y;
+    }
+
+    public static void CalculateLiquidColors(Color tint, out Color topColor, out Color rimColor)
+    {
+        float h, s, v;
+        Color.RGBToHSV(tint, out h, out s, out v);
+
+        // Ta ép mức Saturation tối thiểu để dùng làm gốc tính toán cho Top và Rim.
+        float baseSat = Mathf.Max(s, 0.4f); 
+
+        // ==========================================
+        // 1. TÍNH TOP COLOR (Màu bề mặt chất lỏng)
+        // ==========================================
+        float topHue = Mathf.Repeat(h + 0.08f, 1f); 
+        
+        // ÉP RỰC MÀU: Tăng độ bão hòa lên gấp rưỡi để bề mặt có màu rõ ràng, không bị trắng lóa.
+        float topSat = Mathf.Clamp01(baseSat * 1.5f); 
+        
+        // GIỮ ĐỘ SÁNG AN TOÀN: Chỉ cho sáng bằng màu gốc hoặc nhích lên một tí ti, tuyệt đối không vượt 1.0.
+        float topVal = Mathf.Clamp01(v * 1.05f); 
+        
+        topColor = Color.HSVToRGB(topHue, topSat, topVal);
+
+
+        // ==========================================
+        // 2. TÍNH RIM COLOR (Màu viền phản quang)
+        // ==========================================
+        float rimHue = Mathf.Repeat(h - 0.08f, 1f);
+        
+        // TỐI ĐA ĐỘ RỰC: Viền HDR phải có màu sắc đậm đặc nhất có thể. Ép cứng lên 1.0 (100% Saturation).
+        float rimSat = 1.0f; 
+        
+        float rimVal = Mathf.Clamp(v * 1.5f, 1.2f, 2.5f); 
+
+        rimColor = Color.HSVToRGB(rimHue, rimSat, rimVal);
     }
 }

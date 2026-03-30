@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 public class WristUI : MonoBehaviour
 {
+    public UIPageManager pageManager;
     [Header("Hand Tracking Joints")]
     public Transform handWrist;
     public Transform indexMetacarpal;
@@ -40,6 +41,7 @@ public class WristUI : MonoBehaviour
 
     private void Start()
     {
+        pageManager.ShowPage(EnumPage.Main);
         uiCanvas.SetActive(false);
         molStructureDisplayPrefab.SetActive(false);
         InitDebugUI();

@@ -11,8 +11,14 @@ public class ElectricHeater : LabEquipmentBase
         Kelvin      // K
     }
 
-    [Header("Power")]
+    [Header("Power Settings")]
     [SerializeField] private bool isPowerOn;
+    
+    [Tooltip("Công suất tối đa của bếp (Jun/s hoặc Watt)")]
+    [SerializeField] private float maxHeatPower = 2000f; 
+    
+    [Tooltip("Hệ số truyền nhiệt. Chênh lệch nhiệt độ càng lớn, truyền càng nhanh.")]
+    [SerializeField] private float heatTransferRate = 20f; 
 
     [Header("Unit")]
     [SerializeField] private HeaterUnit currentUnit = HeaterUnit.Celcius;
@@ -44,11 +50,9 @@ public class ElectricHeater : LabEquipmentBase
     private int targetCelciusTemp = 0;
     [HideInInspector] public float currentCelciusTemp = 0;
 
-    
     private float holdTimer;
     private float repeatTimer;
     private int holdDirection; // +1 or -1
-
 
     void Awake()
     {
@@ -84,7 +88,10 @@ public class ElectricHeater : LabEquipmentBase
         float target = isPowerOn ? targetCelciusTemp : MIN_CELCIUS_TEMP;
 
         if (Mathf.Approximately(currentCelciusTemp, target))
+        {
+            ApplyHeatToContainer();
             return;
+        }
 
         if (currentCelciusTemp < target)
         {
@@ -101,7 +108,6 @@ public class ElectricHeater : LabEquipmentBase
 
         ApplyHeatToContainer();
     }
-
 
     private void HandleHoldInput()
     {
@@ -175,7 +181,7 @@ public class ElectricHeater : LabEquipmentBase
 
     private float GetCurrentKelvinTemp()
     {
-        return currentCelciusTemp + 273;
+        return currentCelciusTemp + 273.15f;
     }
 
     private void OnPowerSelected(PointerEvent evt)
@@ -186,6 +192,19 @@ public class ElectricHeater : LabEquipmentBase
     private void OnModeSelected(PointerEvent evt)
     {
         NextMode();
+    }
+
+    private void NextMode()
+    {
+        if (!isPowerOn) return; 
+
+        currentUnit++;
+
+        if ((int)currentUnit >= System.Enum.GetValues(typeof(HeaterUnit)).Length)
+            currentUnit = 0;
+
+        displayUnitText.SetText(currentUnit == HeaterUnit.Celcius ? "C" : "K");
+        SetSetTempText();
     }
 
     private void TogglePower()
@@ -205,31 +224,47 @@ public class ElectricHeater : LabEquipmentBase
         Debug.Log($"Heater Power: {(isPowerOn ? "ON" : "OFF")}");
     }
 
-    private void NextMode()
-    {
-        if (!isPowerOn) return;
-
-        currentUnit++;
-
-        if ((int)currentUnit >= System.Enum.GetValues(typeof(HeaterUnit)).Length)
-            currentUnit = 0;
-
-        displayUnitText.SetText(currentUnit == HeaterUnit.Celcius ? "C" : "K");
-        SetSetTempText();
-    }
-
+    // ====== LOGIC TRUYỀN NHIỆT (JUN) ======
     private void ApplyHeatToContainer()
     {
         if (objectsOnPlate.Count == 0) return;
-        if (!isPowerOn) return;
+
+        // Tắt truyền nhiệt nếu bếp tắt
+        if (!isPowerOn && currentCelciusTemp <= MIN_CELCIUS_TEMP)
+        {
+            foreach (var obj in objectsOnPlate)
+            {
+                obj.SetHeatPower(0f);
+            }
+            return;
+        }
+
+        float heaterTempK = GetCurrentKelvinTemp();
 
         foreach (var obj in objectsOnPlate)
         {
-            float delta = currentCelciusTemp - obj.calciusTemp;
-            
-            if (delta > 0)
+            var mixture = obj.GetMixture();
+            if (mixture == null) 
             {
-                obj.AddHeat(delta * 0.5f * Time.deltaTime);
+                obj.SetHeatPower(0f);
+                continue;
+            }
+
+            // Giả định Mixture.GetTemperature() trả về độ Kelvin (Chuẩn hóa học)
+            float containerTempK = mixture.GetTemperature(); 
+            float deltaTemp = heaterTempK - containerTempK;
+
+            // Nếu bếp nóng hơn dung dịch -> Truyền công suất (Jun) vào
+            if (deltaTemp > 0)
+            {
+                // Truyền nhiệt năng dựa trên chênh lệch nhiệt độ, giới hạn ở Max Power
+                float appliedPower = Mathf.Min(deltaTemp * heatTransferRate, maxHeatPower);
+                obj.SetHeatPower(appliedPower);
+            }
+            else
+            {
+                // Dung dịch đã đạt nhiệt độ của bếp hoặc bếp đang nguội hơn -> Không cấp thêm công suất
+                obj.SetHeatPower(0f);
             }
         }
     }
@@ -240,8 +275,10 @@ public class ElectricHeater : LabEquipmentBase
     {   
         if (!other.TryGetComponent(out ContainerEquipmentBase labEquipment))
             return;
+        
         if (objectsOnPlate.Contains(labEquipment))
             return;
+            
         objectsOnPlate.Add(labEquipment);
     }
 
@@ -249,7 +286,13 @@ public class ElectricHeater : LabEquipmentBase
     {
         if (!other.TryGetComponent(out ContainerEquipmentBase labEquipment))
             return;
-        objectsOnPlate.Remove(labEquipment);
+            
+        if (objectsOnPlate.Contains(labEquipment))
+        {
+            // Bắt buộc Set Heat Power về 0 khi nhấc bình ra khỏi bếp
+            labEquipment.SetHeatPower(0f); 
+            objectsOnPlate.Remove(labEquipment);
+        }
     }
 
     #endregion

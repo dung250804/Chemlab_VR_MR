@@ -103,7 +103,7 @@ MonoBehaviour:
   _maxInteractors: -1
   _maxSelectingInteractors: -1
   _data: {fileID: 0}
-  _pointableElement: {fileID: 0}
+  _pointableElement: {fileID: 528184100338600692}
   _boundsCollider: {fileID: 7367284292426836000}
   _colliders:
   - {fileID: 7367284292426836000}
@@ -125,7 +125,10 @@ MonoBehaviour:
   currentVolume: 0
   spoutCenter: {fileID: 4814489311947217883}
   spoutRadius: 0.058
-  calciusTemp: 25
+  heatConductivity: 1000
+  debugMolecules: []
+  debugMoles: []
+  debugTemperature: 0
   waterStreamPrefab: {fileID: 5238570228697279498, guid: 687fe5b6c1388c34882009636030b3c7, type: 3}
   maxFlowRate: 60
   containerHeight: 0.138
@@ -280,6 +283,9 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 04349e1149a53da42928704ff8596348, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2601593171765911295}
     - targetCorrespondingSourceObject: {fileID: 1598642402713523272, guid: 04349e1149a53da42928704ff8596348, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3687681741701825734}
@@ -318,6 +324,32 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 04349e1149a53da42928704ff8596348, type: 3}
   m_PrefabInstance: {fileID: 1555915322433644859}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1825876961171575914 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 04349e1149a53da42928704ff8596348, type: 3}
+  m_PrefabInstance: {fileID: 1555915322433644859}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &2601593171765911295
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1825876961171575914}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.00087076507, y: 0.000028090328, z: 0.0009071888}
+  m_Center: {x: -0.000002636425, y: 0.0013707092, z: -0.0000041567537}
 --- !u!23 &6609005249920796812 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 5629605086222492087, guid: 04349e1149a53da42928704ff8596348, type: 3}

@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e442336684f7c64fa87bf6258f34991, type: 3}
+  m_Name: ChemicalToolsSO
+  m_EditorClassIdentifier: 
+  chemicalTools:
+  - name: Beaker Big
+    type: 0
+    prefab: {fileID: 144450, guid: 34edf6f811901d745ba9f16663a5342e, type: 3}
+    maxVolume: 100
+  - name: Beaker Med
+    type: 1
+    prefab: {fileID: 144450, guid: 619e4dc22ec33aa4d89bbf4b361ae374, type: 3}
+    maxVolume: 80
+  - name: Beaker Small
+    type: 2
+    prefab: {fileID: 144450, guid: f3e019c94f9ef6e47a7e1e6f8bbc33fe, type: 3}
+    maxVolume: 60
+  - name: Beaker Small
+    type: 2
+    prefab: {fileID: 144450, guid: f3e019c94f9ef6e47a7e1e6f8bbc33fe, type: 3}
+    maxVolume: 60
+  btnChemicalToolPrefab: {fileID: 3159175890935661144, guid: 9a2da1100bb5bfa4a9cede1533d12da4, type: 3}

@@ -2939,7 +2939,7 @@
     "m_Title": "Foam/Edge Frontface",
     "m_Position": {
         "x": 540.0000610351563,
-        "y": 716.0
+        "y": 716.0001220703125
     }
 }
 
@@ -3654,10 +3654,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": 3297.500244140625,
-            "y": 1602.5001220703125,
-            "width": 55.999755859375,
-            "height": 24.0
+            "x": 3314.39990234375,
+            "y": 1564.0,
+            "width": 56.0,
+            "height": 24.0001220703125
         }
     },
     "m_Slots": [
@@ -4190,8 +4190,8 @@
     "m_ObjectId": "4a943008ec3544f3b366094ece5d9648",
     "m_Title": "Mesh Center World Position - Transform Position",
     "m_Position": {
-        "x": 723.1998901367188,
-        "y": -1582.400146484375
+        "x": 723.2000122070313,
+        "y": -1582.4000244140625
     }
 }
 
@@ -4423,7 +4423,7 @@
     "m_Title": "Alpha",
     "m_Position": {
         "x": 470.39996337890627,
-        "y": 1475.19970703125
+        "y": 1475.2000732421875
     }
 }
 
@@ -5043,7 +5043,7 @@
     "m_Title": "Rotate X and Z Wobble",
     "m_Position": {
         "x": 1628.7998046875,
-        "y": -2154.400146484375
+        "y": -2154.39990234375
     }
 }
 
@@ -5561,7 +5561,7 @@
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
-    "m_Value": 0.03999999910593033,
+    "m_Value": 0.0,
     "m_FloatType": 1,
     "m_RangeValues": {
         "x": 0.0,
@@ -5828,7 +5828,7 @@
     "m_Title": "Sine Wave Based on Movement",
     "m_Position": {
         "x": -1455.2001953125,
-        "y": 988.0
+        "y": 987.9998779296875
     }
 }
 
@@ -6019,7 +6019,7 @@
     "m_AlphaMode": 0,
     "m_RenderFace": 0,
     "m_AlphaClip": true,
-    "m_CastShadows": true,
+    "m_CastShadows": false,
     "m_ReceiveShadows": true,
     "m_DisableTint": false,
     "m_AdditionalMotionVectorMode": 0,
@@ -7472,7 +7472,7 @@
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
-    "m_Value": 2.0,
+    "m_Value": 10.0,
     "m_FloatType": 0,
     "m_RangeValues": {
         "x": 0.0,
@@ -7755,8 +7755,8 @@
     "m_ObjectId": "b490cb25e8544c8aba83f93f3e2d255d",
     "m_Title": "Rim",
     "m_Position": {
-        "x": 1635.199462890625,
-        "y": -835.199951171875
+        "x": 1635.19970703125,
+        "y": -835.1998901367188
     }
 }
 
@@ -8140,8 +8140,8 @@
     "m_ObjectId": "c4e1fb3ecb644dcb9269f541da5aaaca",
     "m_Title": "FrontFaceTexture",
     "m_Position": {
-        "x": 1008.7999267578125,
-        "y": -296.79998779296877
+        "x": 1008.7998657226563,
+        "y": -296.7999267578125
     }
 }
 
@@ -8404,7 +8404,7 @@
     "m_Title": "Foam/Edge Backface",
     "m_Position": {
         "x": 1785.599853515625,
-        "y": 368.0
+        "y": 368.0001220703125
     }
 }
 
@@ -9901,8 +9901,8 @@
     "m_ObjectId": "fbd62648a3b540f28647962928511235",
     "m_Title": "Movement",
     "m_Position": {
-        "x": -1997.5999755859375,
-        "y": 1006.400146484375
+        "x": -1997.60009765625,
+        "y": 1006.4000244140625
     }
 }
 

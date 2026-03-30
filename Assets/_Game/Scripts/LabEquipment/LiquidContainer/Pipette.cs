@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using com.ethnicthv.chemlab.engine.mixture;
+using UnityEngine;
 
 public class Pipette : ContainerEquipmentBase
 {
@@ -101,7 +102,11 @@ public class Pipette : ContainerEquipmentBase
         }
 
         float sucked = touchingContainer.Drain(amount);
-        currentVolume += sucked;
+        Mixture mixture = touchingContainer.GetMixture();
+        if (mixture == null) return;
+
+        AddMixture(mixture, sucked);
+        NormalizeState();
     }
 
 
@@ -125,7 +130,7 @@ public class Pipette : ContainerEquipmentBase
         if (pourAmount > 0f)
         {
             StartPour(touchingContainer == null);
-            target?.Fill(pourAmount);
+            target?.AddMixture(GetMixture(), pourAmount);
         }
     }
 

@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ElectronicPipette : ContainerEquipmentBase
@@ -202,10 +203,14 @@ public class ElectronicPipette : ContainerEquipmentBase
         float need = setVolume - currentVolume;
         if (need <= 0f) return;
 
+        var mixture = touchingContainer.GetMixture();
+        if (mixture == null) return;
+
         float sucked = touchingContainer.Drain(need);
-        currentVolume += sucked;
-        currentVolume = Mathf.Min(currentVolume, maxVolume);
+        AddMixture(mixture, sucked);
+
         pipetteBoard.SetCurrentVolumeText(currentVolume, maxVolume);
+        NormalizeState();
     }
 
     // =========================
@@ -219,12 +224,16 @@ public class ElectronicPipette : ContainerEquipmentBase
 
         float amount = Mathf.Min(setVolume, currentVolume);
 
+        var mixture = GetMixture();
+        if (mixture == null) return;
+
         StartPour(touchingContainer == null);
-        target?.Fill(amount);
+        target?.AddMixture(mixture, amount);
         currentVolume -= amount;
         currentVolume = Mathf.Max(currentVolume, 0f);
         pipetteBoard.SetCurrentVolumeText(currentVolume, maxVolume);
         StartCoroutine(DelayedStopPour(0.2f));
+        NormalizeState();
     }
 
     // =========================

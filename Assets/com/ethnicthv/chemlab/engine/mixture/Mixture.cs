@@ -548,27 +548,47 @@ namespace com.ethnicthv.chemlab.engine.mixture
 
         public void UpdateColor()
         {
-            var totalColorContribution = 0.0F;
-            var totalRed = 0.0F;
-            var totalGreen = 0.0F;
-            var totalBlue = 0.0F;
-            var totalAlpha = 64 / 255f;
+            float totalColorConcentration = 0f;
+
+            float r = 0f;
+            float g = 0f;
+            float b = 0f;
 
             foreach (var entry in _mixtureComposition)
             {
-                var color = ColorUtil.GetColor(entry.Key.GetColor());
-                var colorContribution = entry.Value * color.a;
-                totalColorContribution += colorContribution;
-                totalRed += color.r * colorContribution;
-                totalGreen += color.g * colorContribution;
-                totalBlue += color.b * colorContribution;
-                totalAlpha = Mathf.Max(totalAlpha, color.a);
+                var molecule = entry.Key;
+                float concentration = entry.Value;
+
+                Color color = ColorUtil.GetColor(molecule.GetColor());
+
+                if (color.a <= 0.001f) continue;
+
+                totalColorConcentration += concentration;
+
+                r += color.r * concentration;
+                g += color.g * concentration;
+                b += color.b * concentration;
             }
 
-            _color = new Color(totalRed / totalColorContribution,
-                totalGreen / totalColorContribution,
-                totalBlue / totalColorContribution,
-                totalAlpha);
+            Color baseClearLiquidColor = new Color(0.9f, 0.95f, 1f, 1f); 
+
+            if (totalColorConcentration <= 0f)
+            {
+                _color = baseClearLiquidColor;
+                return;
+            }
+
+            Color pigmentColor = new Color(
+                r / totalColorConcentration,
+                g / totalColorConcentration,
+                b / totalColorConcentration,
+                1f 
+            );
+
+            float maxConcentration = 1.0f; 
+            float intensity = Mathf.Clamp01(totalColorConcentration / maxConcentration);
+
+            _color = Color.Lerp(baseClearLiquidColor, pigmentColor, intensity);
         }
 
         [Obsolete]

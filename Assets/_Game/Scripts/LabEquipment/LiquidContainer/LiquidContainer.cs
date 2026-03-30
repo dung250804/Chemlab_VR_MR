@@ -1,3 +1,5 @@
+using com.ethnicthv.chemlab.engine.mixture;
+using com.ethnicthv.chemlab.engine.molecule;
 using UnityEngine;
 
 public class LiquidContainer : ContainerEquipmentBase 
@@ -10,6 +12,8 @@ public class LiquidContainer : ContainerEquipmentBase
     public float containerHeight = 0.2f; // Chiều cao từ đáy lên miệng bình
     public float bottomRadius = 0.05f;   // Bán kính đáy (thường bằng hoặc nhỏ hơn miệng)
 
+    [Header("Default Mixture")]
+    [SerializeField] private MoleculeType defaultMolecule;
     [Header("Debug")]
     public bool showGizmos = true;
 
@@ -26,6 +30,18 @@ public class LiquidContainer : ContainerEquipmentBase
             if (_layerMask == 0) _layerMask = ~LayerMask.GetMask("Ignore Raycast");
             return _layerMask;
         }
+    }
+
+    void Awake()
+    {
+        if (defaultMolecule != MoleculeType.None)
+        {
+            Molecule molecule = MoleculeRegistry.Get(defaultMolecule);
+            var mixture = Mixture.Pure(molecule);
+            SetMixtureAndVolume(mixture, currentVolume);
+            GetMixture().UpdateColor();
+        }
+        NormalizeState();
     }
 
     void Update()
@@ -55,6 +71,7 @@ public class LiquidContainer : ContainerEquipmentBase
         {
             StopPouring();
         }
+        UpdateDebug();
     }
 
     public Vector3 GetVirtualWaterSurfacePosition(Vector3 flowDirWorld)
@@ -199,16 +216,11 @@ public class LiquidContainer : ContainerEquipmentBase
                     break;
             }
 
-            var target = hit.collider.GetComponentInParent<ContainerEquipmentBase>();
+            var target = hit.collider.GetComponentInParent<LiquidContainer>();
 
             if (target != null && target != this)
             {
-                var extracted = ExtractMixture(amount);
-
-                if (extracted != null)
-                {
-                    target.ReceiveMixture(extracted, amount);
-                }
+                target.AddMixture(GetMixture(), amount);
             }
         }
     }

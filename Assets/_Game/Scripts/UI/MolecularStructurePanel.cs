@@ -1,13 +1,16 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MolecularStructurePanel : MonoBehaviour
 {
     [SerializeField] private Transform contentParent;
     [SerializeField] private Transform molStructureDisplayParent;
+    [SerializeField] private Button btnBack;
     private WristUI wristUI;
     void Awake()
     {
         wristUI = GetComponentInParent<WristUI>();
+        btnBack.onClick.AddListener(() => wristUI.pageManager.ShowPage(EnumPage.Main));
         InitButtons();
     }
 
