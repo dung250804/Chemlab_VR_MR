@@ -47,8 +47,9 @@ public class ElectricHeater : LabEquipmentBase
     private const int MAX_CELCIUS_TEMP = 300;
 
     private readonly List<ContainerEquipmentBase> objectsOnPlate = new();
-    private int targetCelciusTemp = 0;
-    [HideInInspector] public float currentCelciusTemp = 0;
+    [Header("Temperature Debug")]
+    public int targetCelciusTemp = 0;
+    public float currentCelciusTemp = 0;
 
     private float holdTimer;
     private float repeatTimer;
@@ -273,18 +274,19 @@ public class ElectricHeater : LabEquipmentBase
 
     private void OnTriggerEnter(Collider other)
     {   
-        if (!other.TryGetComponent(out ContainerEquipmentBase labEquipment))
+        var labEquipment = other.GetComponentInParent<ContainerEquipmentBase>();
+        if (labEquipment == null)
             return;
-        
+
         if (objectsOnPlate.Contains(labEquipment))
             return;
-            
         objectsOnPlate.Add(labEquipment);
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (!other.TryGetComponent(out ContainerEquipmentBase labEquipment))
+        var labEquipment = other.GetComponentInParent<ContainerEquipmentBase>();
+        if (labEquipment == null)
             return;
             
         if (objectsOnPlate.Contains(labEquipment))

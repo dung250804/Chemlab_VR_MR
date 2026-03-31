@@ -1158,6 +1158,7 @@ GameObject:
   - component: {fileID: 136709050}
   - component: {fileID: 136709049}
   - component: {fileID: 136709048}
+  - component: {fileID: 136709051}
   m_Layer: 0
   m_Name: ChemLabEvent
   m_TagString: Untagged
@@ -1205,6 +1206,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &136709051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 136709047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e517e96b699e0034191139a359585a61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chemicalThread: {fileID: 136709049}
 --- !u!1 &162684554
 GameObject:
   m_ObjectHideFlags: 0
@@ -3046,6 +3060,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2794801647550112854, guid: 37fd17d14c715c04ea11d7f3100fafd6, type: 3}
+      propertyPath: isPowerOn
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2794801647550112854, guid: 37fd17d14c715c04ea11d7f3100fafd6, type: 3}
+      propertyPath: maxHeatPower
+      value: 2000
+      objectReference: {fileID: 0}
+    - target: {fileID: 2794801647550112854, guid: 37fd17d14c715c04ea11d7f3100fafd6, type: 3}
+      propertyPath: targetCelciusTemp
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 2794801647550112854, guid: 37fd17d14c715c04ea11d7f3100fafd6, type: 3}
+      propertyPath: currentCelciusTemp
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3744224283341784142, guid: 37fd17d14c715c04ea11d7f3100fafd6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.029009521
@@ -3607,6 +3637,10 @@ PrefabInstance:
     - target: {fileID: 6752090069788830944, guid: 4c1a7c470acbaeb4ca6ba8b659be602c, type: 3}
       propertyPath: defaultMolecule
       value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 6752090069788830944, guid: 4c1a7c470acbaeb4ca6ba8b659be602c, type: 3}
+      propertyPath: heatConductivity
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 9115579375261187575, guid: 4c1a7c470acbaeb4ca6ba8b659be602c, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -14507,7 +14541,6 @@ MonoBehaviour:
   currentVolume: 100
   spoutCenter: {fileID: 3013965927126369}
   spoutRadius: 0.1
-  heatConductivity: 1000
   debugMolecules: []
   debugMoles: []
   debugTemperature: 0
@@ -14515,7 +14548,7 @@ MonoBehaviour:
   maxFlowRate: 50
   containerHeight: 0.275
   bottomRadius: 0.1
-  defaultMolecule: 10
+  defaultMolecule: 1
   showGizmos: 1
 --- !u!4 &4397664626852565498 stripped
 Transform:

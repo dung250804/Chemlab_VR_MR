@@ -18,8 +18,6 @@ public abstract class ContainerEquipmentBase : LabEquipmentBase,
     public Transform spoutCenter;
     public float spoutRadius;
 
-    [SerializeField] private float heatConductivity = 1000f;
-
     [Header("=== DEBUG MIXTURE ===")]
     [SerializeField] private List<string> debugMolecules = new();
     [SerializeField] private List<float> debugMoles = new();
@@ -172,17 +170,18 @@ public abstract class ContainerEquipmentBase : LabEquipmentBase,
     public void Tick()
     {
         if (_contents == null) return;
+        
+        // Newton cooling
+        float k = 0.1f; // hệ số trao đổi nhiệt
+        float envCooling = k * (_contents.GetTemperature() - Environment.Instance.Temperature);
 
-        float heat = _heatPower;
-
-        heat += (Environment.Instance.Temperature - _contents.GetTemperature()) * heatConductivity;
-        heat /= 20f;
+        float heat = _heatPower - envCooling;
 
         if (currentVolume > 0)
         {
-            _contents.Heat(heat / currentVolume);
+            float volumeInLiters = currentVolume / 1000f;
+            _contents.Heat(heat / volumeInLiters);
             _contents.DisturbEquilibrium();
-            _contents.UpdateColor();
         }
 
         _contents.Tick(out var shouldUpdate);
@@ -197,6 +196,7 @@ public abstract class ContainerEquipmentBase : LabEquipmentBase,
             _tickGasMixture = phases.GasMixture;
             _tickGasVolume = phases.GasVolume;
         }
+        _contents.UpdateColor();
         NormalizeState();
         UpdateDebug();
     }
