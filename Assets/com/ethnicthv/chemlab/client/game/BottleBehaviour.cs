@@ -326,7 +326,7 @@ namespace com.ethnicthv.chemlab.client.game
             {
                 // Note: Calculate the heat that is transferred to the mixture
                 var heat = _heatPower;
-                heat += (Environment.Instance.Temperature - _contents.GetTemperature()) *
+                heat += (Environment.Instance.Temperature - _contents.GetTemperatureKelvin()) *
                         heatConductivity; // Fourier's Law (sort of), the divide by 20 is for 20 ticks per second
                 heat /= 20; // divide by 20 is for 20 ticks per second
 

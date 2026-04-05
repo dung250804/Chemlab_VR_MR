@@ -18,6 +18,9 @@ public abstract class ContainerEquipmentBase : LabEquipmentBase,
     public Transform spoutCenter;
     public float spoutRadius;
 
+    [SerializeField] private ParticleSystem smokeParticle;
+    [SerializeField] private bool heatAffect = true;
+
     [Header("=== DEBUG MIXTURE ===")]
     [SerializeField] private List<string> debugMolecules = new();
     [SerializeField] private List<float> debugMoles = new();
@@ -34,6 +37,11 @@ public abstract class ContainerEquipmentBase : LabEquipmentBase,
 
     private void OnEnable()
     {
+        if (smokeParticle != null)
+        {
+            var emission = smokeParticle.emission;
+            emission.rateOverTime = 0;
+        }
         ChemicalTickerHandler.AddTicker(this);
     }
 
@@ -173,11 +181,11 @@ public abstract class ContainerEquipmentBase : LabEquipmentBase,
         
         // Newton cooling
         float k = 0.1f; // hệ số trao đổi nhiệt
-        float envCooling = k * (_contents.GetTemperature() - Environment.Instance.Temperature);
+        float envCooling = k * (_contents.GetTemperatureKelvin() - Environment.Instance.Temperature);
 
         float heat = _heatPower - envCooling;
 
-        if (currentVolume > 0)
+        if (currentVolume > 0 && heatAffect)
         {
             float volumeInLiters = currentVolume / 1000f;
             _contents.Heat(heat / volumeInLiters);
@@ -195,6 +203,8 @@ public abstract class ContainerEquipmentBase : LabEquipmentBase,
 
             _tickGasMixture = phases.GasMixture;
             _tickGasVolume = phases.GasVolume;
+            _tickGasMixture?.UpdateColor();
+            UpdateSmoke();
         }
         _contents.UpdateColor();
         NormalizeState();
@@ -358,7 +368,7 @@ public abstract class ContainerEquipmentBase : LabEquipmentBase,
 
         if (_contents == null) return;
 
-        debugTemperature = _contents.GetTemperature();
+        debugTemperature = _contents.GetTemperatureKelvin();
 
         foreach (var molecule in _contents.GetMolecules())
         {
@@ -371,5 +381,84 @@ public abstract class ContainerEquipmentBase : LabEquipmentBase,
             debugMolecules.Add(molecule.GetFullID());
             debugMoles.Add(actualMoles); 
         }
+    }
+
+    private void UpdateSmoke()
+    {
+        if (smokeParticle == null) return;
+        
+        var emission = smokeParticle.emission;
+        var main = smokeParticle.main;
+
+        // Không có khí → tắt khói
+        if (_tickGasMixture == null || _tickGasVolume <= 0 || _contents == null || currentVolume <= 0)
+        {
+            emission.rateOverTime = 0;
+            return;
+        }
+
+        main.startColor = _tickGasMixture.GetColor();
+
+        // =========================
+        // 1. INTENSITY
+        // =========================
+
+        float gasBuffer = 0f;
+        gasBuffer += _tickGasVolume;
+        gasBuffer = Mathf.Lerp(gasBuffer, 0f, Time.deltaTime * 2f);
+        // normalize lượng khí (tự chỉnh maxGas tùy game)
+        float maxGas = 0.1f; // mL/tick (tweak)
+        float intensity = Mathf.Clamp01(gasBuffer / maxGas);
+
+        // =========================
+        // 2. TEMPERATURE
+        // =========================
+        float temp = _contents.GetTemperatureKelvin();
+        float tempNorm = Mathf.Clamp01((temp - 300f) / 200f); // 300K → 500K
+
+        // =========================
+        // 3. VOLATILITY 
+        // =========================
+        float volatility = EstimateVolatility(_tickGasMixture);
+
+        // =========================
+        // APPLY TO PARTICLE
+        // =========================
+
+        // Khói nhiều hay ít
+        emission.rateOverTime = intensity * 100f;
+
+        // Độ to hạt
+        main.startSize = Mathf.Lerp(0.02f, 0.04f, intensity);
+
+        // Bay nhanh (nhiệt)
+        main.startSpeed = Mathf.Lerp(0.2f, 1f, tempNorm);
+
+        // Tan nhanh (chất)
+        float maxStartLifeTime = Mathf.Lerp(0.5f, 1.5f, currentVolume / maxVolume);
+        float lifetime = maxStartLifeTime * Mathf.Lerp(1f, 0.4f, volatility);
+
+        main.startLifetime = Mathf.Max(lifetime, 0.3f);
+    }   
+
+    private float EstimateVolatility(Mixture gas)
+    {
+        if (gas == null) return 0.5f;
+
+        float score = 0f;
+        int count = 0;
+
+        foreach (var mol in gas.GetMolecules())
+        {
+            count++;
+
+            // Rule đơn giản (bạn có thể refine sau)
+            if (mol == Molecules.Water) score += 0.3f;
+            else if (mol == Molecules.Hydrogen) score += 1f;
+            else if (mol == Molecules.Ammonia) score += 0.9f;
+            else score += 0.6f; // default
+        }
+
+        return count > 0 ? score / count : 0.5f;
     }
 }

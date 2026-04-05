@@ -16,17 +16,17 @@ MonoBehaviour:
   - name: Beaker Big
     type: 0
     prefab: {fileID: 144450, guid: 34edf6f811901d745ba9f16663a5342e, type: 3}
-    maxVolume: 100
+    maxVolume: 250
   - name: Beaker Med
     type: 1
     prefab: {fileID: 144450, guid: 619e4dc22ec33aa4d89bbf4b361ae374, type: 3}
-    maxVolume: 80
+    maxVolume: 150
   - name: Beaker Small
     type: 2
     prefab: {fileID: 144450, guid: f3e019c94f9ef6e47a7e1e6f8bbc33fe, type: 3}
-    maxVolume: 60
+    maxVolume: 50
   - name: Beaker Small
     type: 2
     prefab: {fileID: 144450, guid: f3e019c94f9ef6e47a7e1e6f8bbc33fe, type: 3}
-    maxVolume: 60
+    maxVolume: 0
   btnChemicalToolPrefab: {fileID: 3159175890935661144, guid: 9a2da1100bb5bfa4a9cede1533d12da4, type: 3}

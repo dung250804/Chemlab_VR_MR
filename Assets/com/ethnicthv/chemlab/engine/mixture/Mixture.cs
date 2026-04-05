@@ -108,9 +108,14 @@ namespace com.ethnicthv.chemlab.engine.mixture
             return this;
         }
 
-        public float GetTemperature()
+        public float GetTemperatureKelvin()
         {
             return _temperature;
+        }
+
+        public float GetTemperatureCalcius()
+        {
+            return _temperature - 273.15f;
         }
 
         public void SetState(Molecule molecule, float state)

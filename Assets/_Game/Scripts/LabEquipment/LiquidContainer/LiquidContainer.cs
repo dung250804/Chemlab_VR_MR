@@ -19,6 +19,7 @@ public class LiquidContainer : ContainerEquipmentBase
 
     // Các biến trạng thái
     private Stream waterStream;
+    private Material waterStreamMaterial;
     private bool isPouring = false;
     private const float MAX_LENGTH = 2f;
     private static int _layerMask;
@@ -72,6 +73,11 @@ public class LiquidContainer : ContainerEquipmentBase
             StopPouring();
         }
         UpdateDebug();
+
+        if (waterStreamMaterial == null && waterStream != null)
+            waterStreamMaterial = waterStream.GetLineRenderer().material;
+        if (GetMixture() != null && currentVolume > 0 && waterStream != null && waterStream.gameObject.activeSelf)
+            waterStreamMaterial.color = GetMixture().GetColor();
     }
 
     public Vector3 GetVirtualWaterSurfacePosition(Vector3 flowDirWorld)

@@ -179,7 +179,8 @@ MonoBehaviour:
   currentVolume: 0
   spoutCenter: {fileID: 9188051177337101487}
   spoutRadius: 0
-  heatConductivity: 1000
+  smokeParticle: {fileID: 0}
+  heatAffect: 0
   debugMolecules: []
   debugMoles: []
   debugTemperature: 0

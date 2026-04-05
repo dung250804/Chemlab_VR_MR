@@ -252,7 +252,7 @@ public class ElectricHeater : LabEquipmentBase
             }
 
             // Giả định Mixture.GetTemperature() trả về độ Kelvin (Chuẩn hóa học)
-            float containerTempK = mixture.GetTemperature(); 
+            float containerTempK = mixture.GetTemperatureKelvin(); 
             float deltaTemp = heaterTempK - containerTempK;
 
             // Nếu bếp nóng hơn dung dịch -> Truyền công suất (Jun) vào

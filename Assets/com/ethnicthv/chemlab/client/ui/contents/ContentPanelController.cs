@@ -63,7 +63,7 @@ namespace com.ethnicthv.chemlab.client.ui.contents
                 temperatureText.text = "Nhiệt độ: không rõ";
                 return;
             }
-            var temperature = mixture.GetTemperature();
+            var temperature = mixture.GetTemperatureKelvin();
             var celsiusDegree = temperature - 273.15f;
             var roundedCelsiusDegree = Math.Round(celsiusDegree, 2);
             //Note: round to 2 decimal places

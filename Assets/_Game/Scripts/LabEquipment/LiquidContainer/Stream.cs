@@ -116,4 +116,6 @@ public class Stream : MonoBehaviour
       // }
       yield return null;
    }
+
+   public LineRenderer GetLineRenderer() => lineRenderer;
 }

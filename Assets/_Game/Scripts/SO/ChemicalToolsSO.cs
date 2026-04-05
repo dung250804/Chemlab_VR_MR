@@ -6,6 +6,8 @@ public enum ChemicalToolType
     BeakerBig,
     BeakerMedium,
     BeakerSmall,
+    Pipette,
+    ElectricPipette,
 }
 
 [System.Serializable]

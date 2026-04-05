@@ -13,7 +13,7 @@ namespace com.ethnicthv.chemlab.engine.api.mixture
         public float AddMoles(Molecule molecule, float moles, out bool isMutating);
         public bool ContainMolecule(Molecule solidMolecule);
         IReadOnlyDictionary<Molecule, float> GetMixtureComposition();
-        float GetTemperature();
+        float GetTemperatureKelvin();
         IReadOnlyList<Molecule> GetMolecules();
     }
 }
