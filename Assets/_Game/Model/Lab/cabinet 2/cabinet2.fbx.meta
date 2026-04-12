@@ -3,7 +3,12 @@ guid: 9f95e98f88b328e49b134765ab2a7fae
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: SimplygonCastMaterial.003
+    second: {fileID: 2100000, guid: 851bceb466299404d8a9835beff6492f, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
