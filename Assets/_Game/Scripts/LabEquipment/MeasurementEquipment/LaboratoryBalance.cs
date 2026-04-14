@@ -216,18 +216,28 @@ public class LaboratoryBalance : MeasurementEquipmentBase
 
     private void OnTriggerEnter(Collider other)
     {   
-        if (!other.TryGetComponent(out LabEquipmentBase labEquipment))
+        other.TryGetComponent<LiquidContainer>(out var liquidContainer);
+        if (liquidContainer == null)
+        {
+            liquidContainer = other.GetComponentInParent<LiquidContainer>();
+            if (liquidContainer == null) return;
+        }
+
+        if (objectsOnPlate.Contains(liquidContainer))
             return;
-        if (objectsOnPlate.Contains(labEquipment))
-            return;
-        objectsOnPlate.Add(labEquipment);
+        objectsOnPlate.Add(liquidContainer);
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (!other.TryGetComponent(out LabEquipmentBase labEquipment))
-            return;
-        objectsOnPlate.Remove(labEquipment);
+        other.TryGetComponent<LiquidContainer>(out var liquidContainer);
+        if (liquidContainer == null)
+        {
+            liquidContainer = other.GetComponentInParent<LiquidContainer>();
+            if (liquidContainer == null) return;
+        }
+
+        objectsOnPlate.Remove(liquidContainer);
         if (objectsOnPlate.Count == 0)
             UpdateLabDisplayText();
     }

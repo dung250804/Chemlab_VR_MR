@@ -19,7 +19,6 @@ public class TermoMeterDigital : MonoBehaviour
     public float envInfluence = 0.3f;    // ảnh hưởng môi trường
     public float stabilizeThreshold = 0.01f;
 
-    public Button resetButton;
     public Image temperatureImage;
     public TMP_Text temperatureText;
 
@@ -34,11 +33,6 @@ public class TermoMeterDigital : MonoBehaviour
     private float displayedTempK = 298.15f; // nhiệt kế đang hiển thị (Kelvin)
     private float targetTempK = 298.15f;
     float startupNoise = 0.5f;
-
-    void Awake()
-    {
-        resetButton.onClick.AddListener(ResetThermometer);
-    }
 
     void Start()
     {
@@ -113,7 +107,7 @@ public class TermoMeterDigital : MonoBehaviour
         displayedTempK = Mathf.Lerp(displayedTempK, targetTempK, Time.deltaTime * responseSpeed);
 
         // bị ảnh hưởng bởi môi trường
-        displayedTempK = Mathf.Lerp(displayedTempK, envTemp, Time.deltaTime * envInfluence);
+        // displayedTempK = Mathf.Lerp(displayedTempK, envTemp, Time.deltaTime * envInfluence);
 
         // ổn định
         if (Mathf.Abs(displayedTempK - targetTempK) < stabilizeThreshold)

@@ -19,7 +19,7 @@ public class LitmusPaper : MonoBehaviour
     public float duration = 1.0f; // thời gian đổi màu
     public Ease ease = Ease.OutQuad;
 
-    private bool isUsed = false;
+    public bool isUsed = false;
 
     private Material mat;
 
@@ -28,20 +28,26 @@ public class LitmusPaper : MonoBehaviour
         if (targetRenderer != null)
         {
             mat = targetRenderer.material;
+            mat.color = neutralColor; // mặc định là trung tính
         }
     }
 
     void OnTriggerEnter(Collider other)
     {
         if (isUsed) return;
+        
+        other.TryGetComponent<LiquidContainer>(out var liquidContainer);
+        if (liquidContainer == null)
+        {
+            liquidContainer = other.GetComponentInParent<LiquidContainer>();
+            if (liquidContainer == null) return;
+        }
 
-        var container = other.GetComponentInParent<LiquidContainer>();
-        if (container == null) return;
-
-        float pH = container.GetPH();
+        float pH = liquidContainer.GetPH();
+        Debug.Log($"Litmus Paper touched liquid with pH: {pH}");
         Color targetColor = GetColorFromPH(pH);
 
-        if (container.GetMixture() != null)
+        if (liquidContainer.GetMixture() != null)
         {
             StartColorChange(targetColor);
             isUsed = true;

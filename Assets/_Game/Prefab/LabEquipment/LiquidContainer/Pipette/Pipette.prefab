@@ -10,11 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 4136596486665026}
   - component: {fileID: 8453262653654192480}
-  - component: {fileID: 1255951451751331504}
   - component: {fileID: 1679386662844486448}
   - component: {fileID: 5827860676841209351}
   - component: {fileID: 6455987147713677404}
   - component: {fileID: 6971592883273075530}
+  - component: {fileID: 7940102788743493863}
   m_Layer: 0
   m_Name: Pipette
   m_TagString: Untagged
@@ -66,28 +66,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 1
---- !u!64 &1255951451751331504
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1365609498888834}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -5734556728438698738, guid: 3b9020570df7d9c4bbcfff98bcaf19eb, type: 3}
 --- !u!114 &1679386662844486448
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,9 +106,9 @@ MonoBehaviour:
   _maxSelectingInteractors: 1
   _data: {fileID: 0}
   _pointableElement: {fileID: 6455987147713677404}
-  _boundsCollider: {fileID: 1255951451751331504}
+  _boundsCollider: {fileID: 7940102788743493863}
   _colliders:
-  - {fileID: 1255951451751331504}
+  - {fileID: 7940102788743493863}
 --- !u!114 &6455987147713677404
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,6 +158,27 @@ MonoBehaviour:
   plunger: {fileID: 8289654451181826046}
   minPlungerY: 0.04
   maxPlungerY: 0.14
+--- !u!65 &7940102788743493863
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1365609498888834}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.019435287, y: 0.28571874, z: 0.03118122}
+  m_Center: {x: -0.0001795888, y: -0.05302335, z: -0.00038309977}
 --- !u!1 &7521946706953870329
 GameObject:
   m_ObjectHideFlags: 0

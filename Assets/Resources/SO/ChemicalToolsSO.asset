@@ -25,8 +25,24 @@ MonoBehaviour:
     type: 2
     prefab: {fileID: 144450, guid: f3e019c94f9ef6e47a7e1e6f8bbc33fe, type: 3}
     maxVolume: 50
-  - name: Beaker Small
-    type: 2
-    prefab: {fileID: 144450, guid: f3e019c94f9ef6e47a7e1e6f8bbc33fe, type: 3}
-    maxVolume: 0
+  - name: Test Tube
+    type: 3
+    prefab: {fileID: 144450, guid: cf68fd8d2c616544b87aab3ef70629f2, type: 3}
+    maxVolume: 25
+  - name: Pipette
+    type: 4
+    prefab: {fileID: 1365609498888834, guid: a8c0ffcd92f66401780885a74ce3a767, type: 3}
+    maxVolume: 50
+  - name: E-Pipette
+    type: 5
+    prefab: {fileID: 1365609498888834, guid: e1187e070e105b240b34a6406ba2bb41, type: 3}
+    maxVolume: 80
+  - name: Termometer
+    type: 6
+    prefab: {fileID: 8100966136496915603, guid: 26820510e2d4b7e4da443e3dee6caf38, type: 3}
+    maxVolume: 50
+  - name: Litmus Paper
+    type: 7
+    prefab: {fileID: 2518704223028420588, guid: 26a0eec5148c76c40aacdb1b89d8320b, type: 3}
+    maxVolume: 20
   btnChemicalToolPrefab: {fileID: 3159175890935661144, guid: 9a2da1100bb5bfa4a9cede1533d12da4, type: 3}

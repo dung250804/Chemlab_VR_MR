@@ -221,7 +221,7 @@ public class ElectricHeater : LabEquipmentBase
         displayUnitText.gameObject.SetActive(isPowerOn);
         displayOText.gameObject.SetActive(isPowerOn);
         SetSetTempText();
-
+        displayUnitText.SetText(currentUnit == HeaterUnit.Celcius ? "C" : "K");
         Debug.Log($"Heater Power: {(isPowerOn ? "ON" : "OFF")}");
     }
 
@@ -274,26 +274,34 @@ public class ElectricHeater : LabEquipmentBase
 
     private void OnTriggerEnter(Collider other)
     {   
-        var labEquipment = other.GetComponentInParent<ContainerEquipmentBase>();
-        if (labEquipment == null)
-            return;
+        Debug.Log("Collider Entered: " + other.name);
+        other.TryGetComponent<LiquidContainer>(out var liquidContainer);
+        if (liquidContainer == null)
+        {
+            liquidContainer = other.GetComponentInParent<LiquidContainer>();
+            Debug.Log("Parent Collider: " + (liquidContainer != null ? liquidContainer.name : "None"));
+            if (liquidContainer == null) return;
+        }
 
-        if (objectsOnPlate.Contains(labEquipment))
+        if (objectsOnPlate.Contains(liquidContainer))
             return;
-        objectsOnPlate.Add(labEquipment);
+        objectsOnPlate.Add(liquidContainer);
     }
 
     private void OnTriggerExit(Collider other)
     {
-        var labEquipment = other.GetComponentInParent<ContainerEquipmentBase>();
-        if (labEquipment == null)
-            return;
+        other.TryGetComponent<LiquidContainer>(out var liquidContainer);
+        if (liquidContainer == null)
+        {
+            liquidContainer = other.GetComponentInParent<LiquidContainer>();
+            if (liquidContainer == null) return;
+        }
             
-        if (objectsOnPlate.Contains(labEquipment))
+        if (objectsOnPlate.Contains(liquidContainer))
         {
             // Bắt buộc Set Heat Power về 0 khi nhấc bình ra khỏi bếp
-            labEquipment.SetHeatPower(0f); 
-            objectsOnPlate.Remove(labEquipment);
+            liquidContainer.SetHeatPower(0f); 
+            objectsOnPlate.Remove(liquidContainer);
         }
     }
 

@@ -337,28 +337,39 @@ public abstract class ContainerEquipmentBase : LabEquipmentBase,
     public float GetPH()
     {
         var mixture = GetMixture();
-        if (mixture == null) return 7f;
+        if (mixture == null || currentVolume <= 0f)
+            return 7f;
 
-        float h = mixture.GetMoles(Molecules.Proton);
-        float oh = mixture.GetMoles(Molecules.Hydroxide);
+        // Đổi thể tích sang L (giả sử currentVolume là mL)
+        float volumeInLiters = currentVolume / 1000f;
 
-        float netH = h - oh;
+        // Lấy số mol
+        float hMoles = mixture.GetMoles(Molecules.Proton);
+        float ohMoles = mixture.GetMoles(Molecules.Hydroxide);
 
+        // Đổi sang nồng độ (mol/L)
+        float h = hMoles / volumeInLiters;
+        float oh = ohMoles / volumeInLiters;
+
+        const float Kw = 1e-14f;
         const float epsilon = 1e-7f;
 
-        if (netH > 0)
+        // Nếu có OH- mà không có H+ → tính ngược lại từ Kw
+        if (h <= 0f && oh > 0f)
         {
-            return -Mathf.Log10(Mathf.Max(netH, epsilon));
+            h = Kw / oh;
         }
-        else if (netH < 0)
+
+        // Nếu không có gì → trung tính
+        if (h <= 0f)
         {
-            float pOH = -Mathf.Log10(Mathf.Max(-netH, epsilon));
-            return 14f - pOH;
+            h = epsilon;
         }
-        else
-        {
-            return 7f;
-        }
+
+        float pH = -Mathf.Log10(h);
+
+        // Clamp cho đẹp (tránh bug số)
+        return Mathf.Clamp(pH, 0f, 14f);
     }
 
     protected void UpdateDebug()

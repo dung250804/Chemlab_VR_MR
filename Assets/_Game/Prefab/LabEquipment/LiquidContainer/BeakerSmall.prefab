@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 528184100338600692}
   - component: {fileID: 6510491715951136339}
   - component: {fileID: 2557548939251898396}
+  - component: {fileID: 6518553714880037940}
   m_Layer: 0
   m_Name: BeakerSmall
   m_TagString: Untagged
@@ -34,7 +35,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1305201393308782288}
-  - {fileID: 5842820011226887581}
   - {fileID: 4814489311947217883}
   - {fileID: 1297991561471839491}
   m_Father: {fileID: 0}
@@ -48,7 +48,7 @@ Rigidbody:
   m_GameObject: {fileID: 144450}
   serializedVersion: 4
   m_Mass: 0.1
-  m_Drag: 0
+  m_Drag: 5
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -61,8 +61,8 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 1
@@ -105,9 +105,9 @@ MonoBehaviour:
   _maxSelectingInteractors: -1
   _data: {fileID: 0}
   _pointableElement: {fileID: 528184100338600692}
-  _boundsCollider: {fileID: 7367284292426836000}
+  _boundsCollider: {fileID: 6518553714880037940}
   _colliders:
-  - {fileID: 7367284292426836000}
+  - {fileID: 6518553714880037940}
 --- !u!114 &2557548939251898396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,11 +132,33 @@ MonoBehaviour:
   debugMoles: []
   debugTemperature: 0
   waterStreamPrefab: {fileID: 5238570228697279498, guid: 687fe5b6c1388c34882009636030b3c7, type: 3}
-  maxFlowRate: 60
+  maxFlowRate: 50
   containerHeight: 0.138
   bottomRadius: 0.055
   defaultMolecule: 0
   showGizmos: 1
+--- !u!64 &6518553714880037940
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 144450}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300006, guid: 270388e9f78113c498a7f98dcff95c44, type: 3}
 --- !u!1 &3416439427510360245
 GameObject:
   m_ObjectHideFlags: 0
@@ -168,60 +190,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 432742}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &5096638576860309238
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5842820011226887581}
-  - component: {fileID: 7367284292426836000}
-  m_Layer: 2
-  m_Name: GrabCollider
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5842820011226887581
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5096638576860309238}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 432742}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!64 &7367284292426836000
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5096638576860309238}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300006, guid: 270388e9f78113c498a7f98dcff95c44, type: 3}
 --- !u!1 &7565999252518579651
 GameObject:
   m_ObjectHideFlags: 0

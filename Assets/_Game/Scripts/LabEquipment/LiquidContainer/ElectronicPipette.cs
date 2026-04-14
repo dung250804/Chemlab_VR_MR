@@ -294,14 +294,27 @@ public class ElectronicPipette : ContainerEquipmentBase
     // =========================
     void OnTriggerEnter(Collider other)
     {
-        if (touchingContainer) return;
-        touchingContainer = other.GetComponentInParent<LiquidContainer>();
+        other.TryGetComponent<LiquidContainer>(out var liquidContainer);
+        if (liquidContainer == null)
+        {
+            liquidContainer = other.GetComponentInParent<LiquidContainer>();
+            if (liquidContainer == null) return;
+        }
+        touchingContainer = liquidContainer;
     }
 
     void OnTriggerExit(Collider other)
     {
-        if (other.GetComponentInParent<LiquidContainer>() == touchingContainer)
+        other.TryGetComponent<LiquidContainer>(out var liquidContainer);
+        if (liquidContainer == null)
+        {
+            liquidContainer = other.GetComponentInParent<LiquidContainer>();
+            if (liquidContainer == null) return;
+        }
+        if (touchingContainer == liquidContainer)
+        {
             touchingContainer = null;
+        }
     }
 
     // =========================

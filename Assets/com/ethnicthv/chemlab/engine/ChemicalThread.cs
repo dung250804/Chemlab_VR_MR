@@ -1,4 +1,5 @@
 ﻿using System;
+using com.ethnicthv.chemlab.engine.reaction;
 using UnityEngine;
 
 namespace com.ethnicthv.chemlab.engine
@@ -8,6 +9,14 @@ namespace com.ethnicthv.chemlab.engine
         private bool _running;
         private float _executeInterval = 0.05f;
         private float _interval;
+
+        void Awake()
+        {
+            ReactionProgram.Instance.RegisterReaction(new HClReaction());
+            ReactionProgram.Instance.RegisterReaction(new SulfuricAcidReaction());
+            ReactionProgram.Instance.RegisterReaction(new NeutralizationReaction());
+            ReactionProgram.Instance.RegisterReaction(new AceticAcidReaction());
+        }
 
         private void Start()
         {

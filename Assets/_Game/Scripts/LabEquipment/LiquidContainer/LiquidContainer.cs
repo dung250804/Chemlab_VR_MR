@@ -222,8 +222,12 @@ public class LiquidContainer : ContainerEquipmentBase
                     break;
             }
 
-            var target = hit.collider.GetComponentInParent<LiquidContainer>();
-
+            hit.collider.TryGetComponent<LiquidContainer>(out LiquidContainer target);
+            if (target == null)
+            {
+                target = hit.collider.GetComponentInParent<LiquidContainer>();
+                if (target == null) return;
+            }
             if (target != null && target != this)
             {
                 target.AddMixture(GetMixture(), amount);

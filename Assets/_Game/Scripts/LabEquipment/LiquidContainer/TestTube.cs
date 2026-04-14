@@ -68,8 +68,10 @@ public class TestTube : MonoBehaviour
             if (slotIndex != -1)
             {
                 SnapToSlot(currentRack, slotIndex);
+                return;
             }
         }
+        GetComponent<Rigidbody>().isKinematic = false; // nếu không snap được thì cho rơi tự do
     }
 
     public void SnapToSlot(TubeSupportRack rack, int index)
@@ -81,7 +83,7 @@ public class TestTube : MonoBehaviour
 
         currentRack = rack;
         currentSlotIndex = index;
-
+        GetComponent<Rigidbody>().isKinematic = true; // tránh bị lệch khi snap
         rack.PlaceTube(this, index);
     }
 

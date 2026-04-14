@@ -6,8 +6,11 @@ public enum ChemicalToolType
     BeakerBig,
     BeakerMedium,
     BeakerSmall,
+    TestTube,
     Pipette,
     ElectricPipette,
+    Termometer,
+    LitmusPaper,
 }
 
 [System.Serializable]
