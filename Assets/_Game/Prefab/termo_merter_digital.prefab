@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2296126341963190864}
   - component: {fileID: 2018726110172645393}
   - component: {fileID: 7158780370486638200}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -88,7 +88,7 @@ GameObject:
   - component: {fileID: 734621684400139168}
   - component: {fileID: 5859885630254778242}
   - component: {fileID: 63541225029254696}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -208,7 +208,7 @@ GameObject:
   - component: {fileID: 899647049360226799}
   - component: {fileID: 1349429493826119987}
   - component: {fileID: 6372129531971614656}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: TriggerCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -267,7 +267,6 @@ MonoBehaviour:
   responseSpeed: 2
   envInfluence: 0.3
   stabilizeThreshold: 0.01
-  resetButton: {fileID: 0}
   temperatureImage: {fileID: 7158780370486638200}
   temperatureText: {fileID: 602091706233445924}
   temperatureGradient:
@@ -313,7 +312,7 @@ GameObject:
   - component: {fileID: 5819192720958790491}
   - component: {fileID: 2403753290620915549}
   - component: {fileID: 602091706233445924}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: txtTemperature
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -455,7 +454,7 @@ GameObject:
   - component: {fileID: 756191531556859662}
   - component: {fileID: 9086014979398881667}
   - component: {fileID: 1135649748658450906}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: termo_merter_digital
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -576,7 +575,7 @@ MeshCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -659,7 +658,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1647315741402126331}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: temperature_icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}

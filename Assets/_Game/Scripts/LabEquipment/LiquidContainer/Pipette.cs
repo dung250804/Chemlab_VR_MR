@@ -195,7 +195,12 @@ public class Pipette : ContainerEquipmentBase
     void OnTriggerEnter(Collider other)
     {
         if (touchingContainer) return;
-        var container = other.GetComponentInParent<LiquidContainer>();
+        other.TryGetComponent<LiquidContainer>(out LiquidContainer container);
+        if (container == null)
+        {
+            container = other.GetComponentInParent<LiquidContainer>();
+            if (container == null) return;
+        }
         if (container != null)
         {
             touchingContainer = container;
@@ -204,7 +209,12 @@ public class Pipette : ContainerEquipmentBase
 
     void OnTriggerExit(Collider other)
     {
-        var container = other.GetComponentInParent<LiquidContainer>();
+        other.TryGetComponent<LiquidContainer>(out LiquidContainer container);
+        if (container == null)
+        {
+            container = other.GetComponentInParent<LiquidContainer>();
+            if (container == null) return;
+        }
         if (container != null && container == touchingContainer)
         {
             touchingContainer = null;

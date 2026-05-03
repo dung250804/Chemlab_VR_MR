@@ -19565,6 +19565,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LitmusPaper
       objectReference: {fileID: 0}
+    - target: {fileID: 3191146333660728921, guid: 26a0eec5148c76c40aacdb1b89d8320b, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 256
+      objectReference: {fileID: 0}
     - target: {fileID: 5042772080831568675, guid: 26a0eec5148c76c40aacdb1b89d8320b, type: 3}
       propertyPath: m_LocalScale.x
       value: 2

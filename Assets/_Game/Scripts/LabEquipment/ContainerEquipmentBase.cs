@@ -137,6 +137,14 @@ public abstract class ContainerEquipmentBase : LabEquipmentBase,
     {
         if (mixture == null || volume <= 0 || currentVolume >= maxVolume) return;
         float realVolume = Mathf.Min(volume, maxVolume - currentVolume);
+
+        if (_contents == null || currentVolume <= 0)
+        {
+            _contents = mixture;
+            currentVolume = realVolume;
+            return;
+        }
+        
         var (newMixture, newVolume) = Mixture.Mix(new Dictionary<Mixture, float>
         {
             { GetMixture(), GetVolume() },
@@ -471,5 +479,13 @@ public abstract class ContainerEquipmentBase : LabEquipmentBase,
         }
 
         return count > 0 ? score / count : 0.5f;
+    }
+
+    public override float GetRawWeightGram()
+    {
+        float baseWeight = base.GetRawWeightGram();
+        float liquidWeight = currentVolume;
+
+        return baseWeight + liquidWeight;
     }
 }

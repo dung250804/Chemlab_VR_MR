@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7110926756177897587}
   - component: {fileID: 332243662024326762}
   - component: {fileID: 3985979633977652146}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: LitmusPaper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -118,7 +118,7 @@ GameObject:
   - component: {fileID: 4624067119584304756}
   - component: {fileID: 2396604187121507932}
   - component: {fileID: 3191146333660728921}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: LitmusPref
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -248,7 +248,7 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0

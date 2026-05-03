@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6510491715951136339}
   - component: {fileID: 2557548939251898396}
   - component: {fileID: 6518553714880037940}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BeakerSmall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -168,7 +168,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4814489311947217883}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SproutCenter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -201,7 +201,7 @@ GameObject:
   - component: {fileID: 1297991561471839491}
   - component: {fileID: 2356378674952174475}
   - component: {fileID: 2125063057398233326}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Particle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5090,6 +5090,14 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 04349e1149a53da42928704ff8596348, type: 3}
       propertyPath: m_Name
       value: BeakerSmall
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 04349e1149a53da42928704ff8596348, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1598642402713523272, guid: 04349e1149a53da42928704ff8596348, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 5629605086222492087, guid: 04349e1149a53da42928704ff8596348, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'

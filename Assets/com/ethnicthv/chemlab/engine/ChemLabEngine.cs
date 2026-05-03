@@ -28,7 +28,7 @@ namespace com.ethnicthv.chemlab.engine
         
         private void Start()
         {
-            
+            Application.targetFrameRate = -1;
             chemicalThread.StartTick();
         }
 

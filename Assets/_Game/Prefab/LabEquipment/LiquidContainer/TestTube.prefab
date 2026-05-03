@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 7543085739426739061}
   - component: {fileID: 8350224595987162516}
   - component: {fileID: 5595210631672754057}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: TestTube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -206,7 +206,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4814489311947217883}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SproutCenter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -239,7 +239,7 @@ GameObject:
   - component: {fileID: 1297991561471839491}
   - component: {fileID: 2356378674952174475}
   - component: {fileID: 2125063057398233326}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Particle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5125,9 +5125,17 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 392865750ec844e4f9851a08bc5cc05c, type: 2}
+    - target: {fileID: -4105327785509005120, guid: 85cc681e233d36e488da855aecc49020, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 85cc681e233d36e488da855aecc49020, type: 3}
       propertyPath: m_Name
       value: Ong_nghiem
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 85cc681e233d36e488da855aecc49020, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 7877220041881335146, guid: 85cc681e233d36e488da855aecc49020, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
