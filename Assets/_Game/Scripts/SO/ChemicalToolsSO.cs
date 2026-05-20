@@ -11,6 +11,7 @@ public enum ChemicalToolType
     ElectricPipette,
     Termometer,
     LitmusPaper,
+    PhMeter,
 }
 
 [System.Serializable]

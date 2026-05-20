@@ -45,4 +45,8 @@ MonoBehaviour:
     type: 7
     prefab: {fileID: 2518704223028420588, guid: 26a0eec5148c76c40aacdb1b89d8320b, type: 3}
     maxVolume: 20
+  - name: pH Meter
+    type: 8
+    prefab: {fileID: 8100966136496915603, guid: 777445b85a0319242a9c21195bc5f1e2, type: 3}
+    maxVolume: 20
   btnChemicalToolPrefab: {fileID: 3159175890935661144, guid: 9a2da1100bb5bfa4a9cede1533d12da4, type: 3}

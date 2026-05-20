@@ -345,39 +345,172 @@ public abstract class ContainerEquipmentBase : LabEquipmentBase,
     public float GetPH()
     {
         var mixture = GetMixture();
+
         if (mixture == null || currentVolume <= 0f)
             return 7f;
 
-        // Đổi thể tích sang L (giả sử currentVolume là mL)
-        float volumeInLiters = currentVolume / 1000f;
+        float volumeL =
+            currentVolume / 1000f;
 
-        // Lấy số mol
-        float hMoles = mixture.GetMoles(Molecules.Proton);
-        float ohMoles = mixture.GetMoles(Molecules.Hydroxide);
+        const float epsilon = 1e-14f;
+        const float waterKw = 1e-14f;
 
-        // Đổi sang nồng độ (mol/L)
-        float h = hMoles / volumeInLiters;
-        float oh = ohMoles / volumeInLiters;
+        // =====================================================
+        // Strong acid/base
+        // =====================================================
 
-        const float Kw = 1e-14f;
-        const float epsilon = 1e-7f;
+        float hMoles =
+            mixture.GetMoles(Molecules.Proton);
 
-        // Nếu có OH- mà không có H+ → tính ngược lại từ Kw
-        if (h <= 0f && oh > 0f)
+        float ohMoles =
+            mixture.GetMoles(Molecules.Hydroxide);
+
+        // =====================================================
+        // Weak acids
+        // =====================================================
+
+        // Acetic acid
+        float aceticMoles =
+            mixture.GetMoles(Molecules.AceticAcid);
+
+        if (aceticMoles > 0f)
         {
-            h = Kw / oh;
+            float concentration =
+                aceticMoles / volumeL;
+
+            // x = sqrt(Ka * C)
+            float hFromAcetic =
+                Mathf.Sqrt(
+                    1.8e-5f * concentration
+                );
+
+            hMoles +=
+                hFromAcetic * volumeL;
         }
 
-        // Nếu không có gì → trung tính
-        if (h <= 0f)
+        // Ammonium
+        float ammoniumMoles =
+            mixture.GetMoles(Molecules.Ammonium);
+
+        if (ammoniumMoles > 0f)
         {
-            h = epsilon;
+            float concentration =
+                ammoniumMoles / volumeL;
+
+            // Ka NH4+
+            float hFromAmmonium =
+                Mathf.Sqrt(
+                    5.6e-10f * concentration
+                );
+
+            hMoles +=
+                hFromAmmonium * volumeL;
         }
 
-        float pH = -Mathf.Log10(h);
+        // =====================================================
+        // Weak bases
+        // =====================================================
 
-        // Clamp cho đẹp (tránh bug số)
-        return Mathf.Clamp(pH, 0f, 14f);
+        // Ammonia
+        float ammoniaMoles =
+            mixture.GetMoles(Molecules.Ammonia);
+
+        if (ammoniaMoles > 0f)
+        {
+            float concentration =
+                ammoniaMoles / volumeL;
+
+            // Kb NH3
+            float ohFromAmmonia =
+                Mathf.Sqrt(
+                    1.8e-5f * concentration
+                );
+
+            ohMoles +=
+                ohFromAmmonia * volumeL;
+        }
+
+        // Acetate
+        float acetateMoles =
+            mixture.GetMoles(Molecules.Acetate);
+
+        if (acetateMoles > 0f)
+        {
+            float concentration =
+                acetateMoles / volumeL;
+
+            // Kb acetate
+            float ohFromAcetate =
+                Mathf.Sqrt(
+                    5.6e-10f * concentration
+                );
+
+            ohMoles +=
+                ohFromAcetate * volumeL;
+        }
+
+        // =====================================================
+        // Neutralization
+        // =====================================================
+
+        float reacted =
+            Mathf.Min(
+                hMoles,
+                ohMoles
+            );
+
+        hMoles -= reacted;
+        ohMoles -= reacted;
+
+        // =====================================================
+        // Acid
+        // =====================================================
+
+        if (hMoles > epsilon)
+        {
+            float h =
+                Mathf.Max(
+                    hMoles / volumeL,
+                    epsilon
+                );
+
+            float pH =
+                -Mathf.Log10(h);
+
+            return Mathf.Clamp(
+                pH,
+                0f,
+                14f
+            );
+        }
+
+        // =====================================================
+        // Base
+        // =====================================================
+
+        if (ohMoles > epsilon)
+        {
+            float oh =
+                Mathf.Max(
+                    ohMoles / volumeL,
+                    epsilon
+                );
+
+            float h =
+                waterKw / oh;
+
+            float pH =
+                -Mathf.Log10(h);
+
+            return Mathf.Clamp(
+                pH,
+                0f,
+                14f
+            );
+        }
+
+        // Neutral
+        return 7f;
     }
 
     protected void UpdateDebug()
